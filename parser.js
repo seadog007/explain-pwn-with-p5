@@ -17,21 +17,21 @@ let op_code = [
   {'op': [0x0f, 0x05],        'extend_set': null,     'extend_loc': null, 'log': 'syscall',           'comment': 'syscall',             'handler': 'syscall',             'data_bytes': 0},
 ].map(op => { // extend op code list from one to manys
   let new_op_codes = [];
-    // only extend when `extend_set` not null
-    if (op.extend_set != null) {
-      for (let i in op.extend_set) {
-        // clone object, can replace by lodash
-        let new_op = Object.assign({}, op);               // clone
-        new_op.op = Object.assign([], op.op);             // array need clone again
+  // only extend when `extend_set` not null
+  if (op.extend_set != null) {
+    for (let i in op.extend_set) {
+      // clone object, can replace by lodash
+      let new_op = Object.assign({}, op);               // clone
+      new_op.op = Object.assign([], op.op);             // array need clone again
 
-        new_op.op[new_op.extend_loc] -= 0 - i;            // prevent to use operator `+=` for misappend as string
-        new_op.reg = op.extend_set[i];
-        new_op_codes.push(new_op);                        // append extended op_list
-      }
-    } else {
-      new_op_codes = [ op ];
+      new_op.op[new_op.extend_loc] -= 0 - i;            // prevent to use operator `+=` for misappend as string
+      new_op.reg = op.extend_set[i];
+      new_op_codes.push(new_op);                        // append extended op_list
     }
-    return new_op_codes;
+  } else {
+    new_op_codes = [ op ];
+  }
+  return new_op_codes;
 }).flat();    // flatten them
 
 // handler_exmaple(reg, page, io, log_format, match_reg, data);
@@ -44,7 +44,6 @@ class Parser {
     this.set = bytes;
   }
   do_it(reg, page, io) {
-    // let ins = new Instruction(reg, page, io); // wait Instruction to implement
     for (let op of op_code) {
       // convert to string to compare is easier then array compare, but also can use lodash of `_.isEqual()`
       if (btoc(op.op) == btoc(this.set.slice(0, op.op.length))) {
@@ -56,7 +55,8 @@ class Parser {
           op.data = [].concat(this.set.slice(0, op.data_bytes));  // slice the data to store
           this.set = this.set.slice(op.data.length);              // slice out the data from buffer
         }
-        // ins[op.handler](op.log, op.reg, op.data);                 // push matched op to bin array // wait Instruction to implement
+        // let ins = new Instruction(reg, page, io);              // wait Instruction to implement
+        // ins[op.handler](op.log, op.reg, op.data);              // push matched op to bin array // wait Instruction to implement
         return op.op.length + (op.data || []).length;
       }
     }
