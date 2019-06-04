@@ -48,3 +48,8 @@ function btoc(b) {
 function ctob(c) {
   return Array.from(c).map(c => c.charCodeAt(0));
 }
+
+// format byte to hex format string
+function byte_to_hex(b) {
+  return '0x' + (b < 0x10 ? '0' + b.toString(0x10) : b.toString(0x10));
+}
