@@ -6,13 +6,13 @@ let list8 = ['al', 'cl', 'dl', 'bl', 'spl', 'bpl', 'sil', 'dil'];
 let op_code = [
   {'op': [0x50],              'extend_set': list64,   'extend_loc': 0,    'log': 'push %reg',         'comment': 'push r64',            'handler': 'push_single_main64',  'data_bytes': 0},
   {'op': [0x58],              'extend_set': list64,   'extend_loc': 0,    'log': 'pop %reg',          'comment': 'pop r64',             'handler': 'pop_single_main64',   'data_bytes': 0},
-  {'op': [0xb0],              'extend_set': list8,    'extend_loc': 0,    'log': 'mov %reg, %value',  'comment': 'mov r8, const8',      'handler': 'mov_single_main8',    'data_bytes': 1},
-  {'op': [0x66, 0xb8],        'extend_set': list16,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'mov r16, const16',    'handler': 'mov_single_main16',   'data_bytes': 2},
-  {'op': [0x66, 0xc7, 0xc0],  'extend_set': list16,   'extend_loc': 2,    'log': 'mov %reg, %value',  'comment': 'mov r16, const16',    'handler': 'mov_single_main16',   'data_bytes': 2},
-  {'op': [0xb8],              'extend_set': list32,   'extend_loc': 0,    'log': 'mov %reg, %value',  'comment': 'mov r32, const32',    'handler': 'mov_single_main32',   'data_bytes': 4},
-  {'op': [0xc7, 0xc0],        'extend_set': list32,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'mov r32, const32',    'handler': 'mov_single_main32',   'data_bytes': 4},
-  {'op': [0x48, 0xc7, 0xc0],  'extend_set': list64,   'extend_loc': 2,    'log': 'mov %reg, %value',  'comment': 'mov r64, const32',    'handler': 'mov_single_main64',   'data_bytes': 4},
-  {'op': [0x48, 0xb8],        'extend_set': list64,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'movabs r64, const64', 'handler': 'mov_single_main64',   'data_bytes': 8},
+  {'op': [0xb0],              'extend_set': list8,    'extend_loc': 0,    'log': 'mov %reg, %value',  'comment': 'mov r8, const8',      'handler': 'mov',                 'data_bytes': 1},
+  {'op': [0x66, 0xb8],        'extend_set': list16,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'mov r16, const16',    'handler': 'mov',                 'data_bytes': 2},
+  {'op': [0x66, 0xc7, 0xc0],  'extend_set': list16,   'extend_loc': 2,    'log': 'mov %reg, %value',  'comment': 'mov r16, const16',    'handler': 'mov',                 'data_bytes': 2},
+  {'op': [0xb8],              'extend_set': list32,   'extend_loc': 0,    'log': 'mov %reg, %value',  'comment': 'mov r32, const32',    'handler': 'mov',                 'data_bytes': 4},
+  {'op': [0xc7, 0xc0],        'extend_set': list32,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'mov r32, const32',    'handler': 'mov',                 'data_bytes': 4},
+  {'op': [0x48, 0xc7, 0xc0],  'extend_set': list64,   'extend_loc': 2,    'log': 'mov %reg, %value',  'comment': 'mov r64, const32',    'handler': 'mov',                 'data_bytes': 4},
+  {'op': [0x48, 0xb8],        'extend_set': list64,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'movabs r64, const64', 'handler': 'mov',                 'data_bytes': 8},
   {'op': [0x90],              'extend_set': null,     'extend_loc': null, 'log': 'nop',               'comment': 'nop',                 'handler': 'nop',                 'data_bytes': 0},
   {'op': [0x0f, 0x05],        'extend_set': null,     'extend_loc': null, 'log': 'syscall',           'comment': 'syscall',             'handler': 'syscall',             'data_bytes': 0},
 ].map(op => { // extend op code list from one to manys
@@ -55,12 +55,15 @@ class Parser {
           op.data = [].concat(this.set.slice(0, op.data_bytes));  // slice the data to store
           this.set = this.set.slice(op.data.length);              // slice out the data from buffer
         }
-        // let ins = new Instruction(reg, page, io);              // wait Instruction to implement
-        // ins[op.handler](op.log, op.reg, op.data);              // push matched op to bin array // wait Instruction to implement
+        let ins = new Instruction(reg, page, io);
+        if (ins[op.handler]){
+          ins[op.handler](op.log, op.reg, op.data);
+        }else{
+          console.log('OP handler not implement');
+        }
         return op.op.length + (op.data || []).length;
       }
     }
-    throw 'a';
-    return 0;
+    throw 'Unknown OP Code';
   }
 }

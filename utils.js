@@ -53,3 +53,11 @@ function ctob(c) {
 function byte_to_hex(b) {
   return '0x' + (b < 0x10 ? '0' + b.toString(0x10) : b.toString(0x10));
 }
+
+function little_endian_to_number(data){
+  let sum = BigInt(0);
+  for (let i = data.length - 1; i >= 0; i--) {
+    sum += BigInt(data[i]) * (BigInt(256) ** BigInt(i));
+  }
+  return sum;
+}
