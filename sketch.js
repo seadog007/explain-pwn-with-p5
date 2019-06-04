@@ -13,6 +13,7 @@ function preload() {
 function setup() {
   createCanvas(800, 600);
   textFont(fontRegular);
+  frameRate(1);
 
   let program = page.new_segment('0x4004b0', '0x100', 'r-xp', 'program');
   let stack = page.new_segment('0x7fffffff0000', '0x1000', 'rw-p', 'stack0');
