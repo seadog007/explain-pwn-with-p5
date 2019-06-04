@@ -1,0 +1,1403 @@
+/*
+output = [];
+for(i of b){
+  out = {};
+  c = i.getElementsByTagName('td')
+  if (c.length > 1){
+    out['rax'] = parseInt(c[0].innerText);
+    out['name'] = c[1].innerText;
+    sum = 0;
+    if (c[2].innerText) sum++;
+    if (c[3].innerText) sum++;
+    if (c[4].innerText) sum++;
+    if (c[5].innerText) sum++;
+    if (c[6].innerText) sum++;
+    if (c[7].innerText) sum++;
+    out['argc'] = sum
+    output.push(out);
+  }
+}
+console.log(JSON.stringify(output))
+on https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/
+ */
+let syscall_list = [{
+	"rax": 0,
+	"name": "sys_read",
+	"argc": 3
+}, {
+	"rax": 1,
+	"name": "sys_write",
+	"argc": 3
+}, {
+	"rax": 2,
+	"name": "sys_open",
+	"argc": 3
+}, {
+	"rax": 3,
+	"name": "sys_close",
+	"argc": 1
+}, {
+	"rax": 4,
+	"name": "sys_stat",
+	"argc": 2
+}, {
+	"rax": 5,
+	"name": "sys_fstat",
+	"argc": 2
+}, {
+	"rax": 6,
+	"name": "sys_lstat",
+	"argc": 2
+}, {
+	"rax": 7,
+	"name": "sys_poll",
+	"argc": 3
+}, {
+	"rax": 8,
+	"name": "sys_lseek",
+	"argc": 3
+}, {
+	"rax": 9,
+	"name": "sys_mmap",
+	"argc": 6
+}, {
+	"rax": 10,
+	"name": "sys_mprotect",
+	"argc": 3
+}, {
+	"rax": 11,
+	"name": "sys_munmap",
+	"argc": 2
+}, {
+	"rax": 12,
+	"name": "sys_brk",
+	"argc": 1
+}, {
+	"rax": 13,
+	"name": "sys_rt_sigaction",
+	"argc": 4
+}, {
+	"rax": 14,
+	"name": "sys_rt_sigprocmask",
+	"argc": 4
+}, {
+	"rax": 15,
+	"name": "sys_rt_sigreturn",
+	"argc": 1
+}, {
+	"rax": 16,
+	"name": "sys_ioctl",
+	"argc": 3
+}, {
+	"rax": 17,
+	"name": "sys_pread64",
+	"argc": 4
+}, {
+	"rax": 18,
+	"name": "sys_pwrite64",
+	"argc": 4
+}, {
+	"rax": 19,
+	"name": "sys_readv",
+	"argc": 3
+}, {
+	"rax": 20,
+	"name": "sys_writev",
+	"argc": 3
+}, {
+	"rax": 21,
+	"name": "sys_access",
+	"argc": 2
+}, {
+	"rax": 22,
+	"name": "sys_pipe",
+	"argc": 1
+}, {
+	"rax": 23,
+	"name": "sys_select",
+	"argc": 5
+}, {
+	"rax": 24,
+	"name": "sys_sched_yield",
+	"argc": 0
+}, {
+	"rax": 25,
+	"name": "sys_mremap",
+	"argc": 5
+}, {
+	"rax": 26,
+	"name": "sys_msync",
+	"argc": 3
+}, {
+	"rax": 27,
+	"name": "sys_mincore",
+	"argc": 3
+}, {
+	"rax": 28,
+	"name": "sys_madvise",
+	"argc": 3
+}, {
+	"rax": 29,
+	"name": "sys_shmget",
+	"argc": 3
+}, {
+	"rax": 30,
+	"name": "sys_shmat",
+	"argc": 3
+}, {
+	"rax": 31,
+	"name": "sys_shmctl",
+	"argc": 3
+}, {
+	"rax": 32,
+	"name": "sys_dup",
+	"argc": 1
+}, {
+	"rax": 33,
+	"name": "sys_dup2",
+	"argc": 2
+}, {
+	"rax": 34,
+	"name": "sys_pause",
+	"argc": 0
+}, {
+	"rax": 35,
+	"name": "sys_nanosleep",
+	"argc": 2
+}, {
+	"rax": 36,
+	"name": "sys_getitimer",
+	"argc": 2
+}, {
+	"rax": 37,
+	"name": "sys_alarm",
+	"argc": 1
+}, {
+	"rax": 38,
+	"name": "sys_setitimer",
+	"argc": 3
+}, {
+	"rax": 39,
+	"name": "sys_getpid",
+	"argc": 0
+}, {
+	"rax": 40,
+	"name": "sys_sendfile",
+	"argc": 4
+}, {
+	"rax": 41,
+	"name": "sys_socket",
+	"argc": 3
+}, {
+	"rax": 42,
+	"name": "sys_connect",
+	"argc": 3
+}, {
+	"rax": 43,
+	"name": "sys_accept",
+	"argc": 3
+}, {
+	"rax": 44,
+	"name": "sys_sendto",
+	"argc": 6
+}, {
+	"rax": 45,
+	"name": "sys_recvfrom",
+	"argc": 6
+}, {
+	"rax": 46,
+	"name": "sys_sendmsg",
+	"argc": 3
+}, {
+	"rax": 47,
+	"name": "sys_recvmsg",
+	"argc": 3
+}, {
+	"rax": 48,
+	"name": "sys_shutdown",
+	"argc": 2
+}, {
+	"rax": 49,
+	"name": "sys_bind",
+	"argc": 3
+}, {
+	"rax": 50,
+	"name": "sys_listen",
+	"argc": 2
+}, {
+	"rax": 51,
+	"name": "sys_getsockname",
+	"argc": 3
+}, {
+	"rax": 52,
+	"name": "sys_getpeername",
+	"argc": 3
+}, {
+	"rax": 53,
+	"name": "sys_socketpair",
+	"argc": 4
+}, {
+	"rax": 54,
+	"name": "sys_setsockopt",
+	"argc": 5
+}, {
+	"rax": 55,
+	"name": "sys_getsockopt",
+	"argc": 5
+}, {
+	"rax": 56,
+	"name": "sys_clone",
+	"argc": 4
+}, {
+	"rax": 57,
+	"name": "sys_fork",
+	"argc": 0
+}, {
+	"rax": 58,
+	"name": "sys_vfork",
+	"argc": 0
+}, {
+	"rax": 59,
+	"name": "sys_execve",
+	"argc": 3
+}, {
+	"rax": 60,
+	"name": "sys_exit",
+	"argc": 1
+}, {
+	"rax": 61,
+	"name": "sys_wait4",
+	"argc": 4
+}, {
+	"rax": 62,
+	"name": "sys_kill",
+	"argc": 2
+}, {
+	"rax": 63,
+	"name": "sys_uname",
+	"argc": 1
+}, {
+	"rax": 64,
+	"name": "sys_semget",
+	"argc": 3
+}, {
+	"rax": 65,
+	"name": "sys_semop",
+	"argc": 3
+}, {
+	"rax": 66,
+	"name": "sys_semctl",
+	"argc": 4
+}, {
+	"rax": 67,
+	"name": "sys_shmdt",
+	"argc": 1
+}, {
+	"rax": 68,
+	"name": "sys_msgget",
+	"argc": 2
+}, {
+	"rax": 69,
+	"name": "sys_msgsnd",
+	"argc": 4
+}, {
+	"rax": 70,
+	"name": "sys_msgrcv",
+	"argc": 5
+}, {
+	"rax": 71,
+	"name": "sys_msgctl",
+	"argc": 3
+}, {
+	"rax": 72,
+	"name": "sys_fcntl",
+	"argc": 3
+}, {
+	"rax": 73,
+	"name": "sys_flock",
+	"argc": 2
+}, {
+	"rax": 74,
+	"name": "sys_fsync",
+	"argc": 1
+}, {
+	"rax": 75,
+	"name": "sys_fdatasync",
+	"argc": 1
+}, {
+	"rax": 76,
+	"name": "sys_truncate",
+	"argc": 2
+}, {
+	"rax": 77,
+	"name": "sys_ftruncate",
+	"argc": 2
+}, {
+	"rax": 78,
+	"name": "sys_getdents",
+	"argc": 3
+}, {
+	"rax": 79,
+	"name": "sys_getcwd",
+	"argc": 2
+}, {
+	"rax": 80,
+	"name": "sys_chdir",
+	"argc": 1
+}, {
+	"rax": 81,
+	"name": "sys_fchdir",
+	"argc": 1
+}, {
+	"rax": 82,
+	"name": "sys_rename",
+	"argc": 2
+}, {
+	"rax": 83,
+	"name": "sys_mkdir",
+	"argc": 2
+}, {
+	"rax": 84,
+	"name": "sys_rmdir",
+	"argc": 1
+}, {
+	"rax": 85,
+	"name": "sys_creat",
+	"argc": 2
+}, {
+	"rax": 86,
+	"name": "sys_link",
+	"argc": 2
+}, {
+	"rax": 87,
+	"name": "sys_unlink",
+	"argc": 1
+}, {
+	"rax": 88,
+	"name": "sys_symlink",
+	"argc": 2
+}, {
+	"rax": 89,
+	"name": "sys_readlink",
+	"argc": 3
+}, {
+	"rax": 90,
+	"name": "sys_chmod",
+	"argc": 2
+}, {
+	"rax": 91,
+	"name": "sys_fchmod",
+	"argc": 2
+}, {
+	"rax": 92,
+	"name": "sys_chown",
+	"argc": 3
+}, {
+	"rax": 93,
+	"name": "sys_fchown",
+	"argc": 3
+}, {
+	"rax": 94,
+	"name": "sys_lchown",
+	"argc": 3
+}, {
+	"rax": 95,
+	"name": "sys_umask",
+	"argc": 1
+}, {
+	"rax": 96,
+	"name": "sys_gettimeofday",
+	"argc": 2
+}, {
+	"rax": 97,
+	"name": "sys_getrlimit",
+	"argc": 2
+}, {
+	"rax": 98,
+	"name": "sys_getrusage",
+	"argc": 2
+}, {
+	"rax": 99,
+	"name": "sys_sysinfo",
+	"argc": 1
+}, {
+	"rax": 100,
+	"name": "sys_times",
+	"argc": 1
+}, {
+	"rax": 101,
+	"name": "sys_ptrace",
+	"argc": 4
+}, {
+	"rax": 102,
+	"name": "sys_getuid",
+	"argc": 0
+}, {
+	"rax": 103,
+	"name": "sys_syslog",
+	"argc": 3
+}, {
+	"rax": 104,
+	"name": "sys_getgid",
+	"argc": 0
+}, {
+	"rax": 105,
+	"name": "sys_setuid",
+	"argc": 1
+}, {
+	"rax": 106,
+	"name": "sys_setgid",
+	"argc": 1
+}, {
+	"rax": 107,
+	"name": "sys_geteuid",
+	"argc": 0
+}, {
+	"rax": 108,
+	"name": "sys_getegid",
+	"argc": 0
+}, {
+	"rax": 109,
+	"name": "sys_setpgid",
+	"argc": 2
+}, {
+	"rax": 110,
+	"name": "sys_getppid",
+	"argc": 0
+}, {
+	"rax": 111,
+	"name": "sys_getpgrp",
+	"argc": 0
+}, {
+	"rax": 112,
+	"name": "sys_setsid",
+	"argc": 0
+}, {
+	"rax": 113,
+	"name": "sys_setreuid",
+	"argc": 2
+}, {
+	"rax": 114,
+	"name": "sys_setregid",
+	"argc": 2
+}, {
+	"rax": 115,
+	"name": "sys_getgroups",
+	"argc": 2
+}, {
+	"rax": 116,
+	"name": "sys_setgroups",
+	"argc": 2
+}, {
+	"rax": 117,
+	"name": "sys_setresuid",
+	"argc": 3
+}, {
+	"rax": 118,
+	"name": "sys_getresuid",
+	"argc": 3
+}, {
+	"rax": 119,
+	"name": "sys_setresgid",
+	"argc": 3
+}, {
+	"rax": 120,
+	"name": "sys_getresgid",
+	"argc": 3
+}, {
+	"rax": 121,
+	"name": "sys_getpgid",
+	"argc": 1
+}, {
+	"rax": 122,
+	"name": "sys_setfsuid",
+	"argc": 1
+}, {
+	"rax": 123,
+	"name": "sys_setfsgid",
+	"argc": 1
+}, {
+	"rax": 124,
+	"name": "sys_getsid",
+	"argc": 1
+}, {
+	"rax": 125,
+	"name": "sys_capget",
+	"argc": 2
+}, {
+	"rax": 126,
+	"name": "sys_capset",
+	"argc": 2
+}, {
+	"rax": 127,
+	"name": "sys_rt_sigpending",
+	"argc": 2
+}, {
+	"rax": 128,
+	"name": "sys_rt_sigtimedwait",
+	"argc": 4
+}, {
+	"rax": 129,
+	"name": "sys_rt_sigqueueinfo",
+	"argc": 3
+}, {
+	"rax": 130,
+	"name": "sys_rt_sigsuspend",
+	"argc": 2
+}, {
+	"rax": 131,
+	"name": "sys_sigaltstack",
+	"argc": 2
+}, {
+	"rax": 132,
+	"name": "sys_utime",
+	"argc": 2
+}, {
+	"rax": 133,
+	"name": "sys_mknod",
+	"argc": 3
+}, {
+	"rax": 134,
+	"name": "sys_uselib",
+	"argc": 1
+}, {
+	"rax": 135,
+	"name": "sys_personality",
+	"argc": 1
+}, {
+	"rax": 136,
+	"name": "sys_ustat",
+	"argc": 2
+}, {
+	"rax": 137,
+	"name": "sys_statfs",
+	"argc": 2
+}, {
+	"rax": 138,
+	"name": "sys_fstatfs",
+	"argc": 2
+}, {
+	"rax": 139,
+	"name": "sys_sysfs",
+	"argc": 3
+}, {
+	"rax": 140,
+	"name": "sys_getpriority",
+	"argc": 2
+}, {
+	"rax": 141,
+	"name": "sys_setpriority",
+	"argc": 3
+}, {
+	"rax": 142,
+	"name": "sys_sched_setparam",
+	"argc": 2
+}, {
+	"rax": 143,
+	"name": "sys_sched_getparam",
+	"argc": 2
+}, {
+	"rax": 144,
+	"name": "sys_sched_setscheduler",
+	"argc": 3
+}, {
+	"rax": 145,
+	"name": "sys_sched_getscheduler",
+	"argc": 1
+}, {
+	"rax": 146,
+	"name": "sys_sched_get_priority_max",
+	"argc": 1
+}, {
+	"rax": 147,
+	"name": "sys_sched_get_priority_min",
+	"argc": 1
+}, {
+	"rax": 148,
+	"name": "sys_sched_rr_get_interval",
+	"argc": 2
+}, {
+	"rax": 149,
+	"name": "sys_mlock",
+	"argc": 2
+}, {
+	"rax": 150,
+	"name": "sys_munlock",
+	"argc": 2
+}, {
+	"rax": 151,
+	"name": "sys_mlockall",
+	"argc": 1
+}, {
+	"rax": 152,
+	"name": "sys_munlockall",
+	"argc": 0
+}, {
+	"rax": 153,
+	"name": "sys_vhangup",
+	"argc": 0
+}, {
+	"rax": 154,
+	"name": "sys_modify_ldt",
+	"argc": 3
+}, {
+	"rax": 155,
+	"name": "sys_pivot_root",
+	"argc": 2
+}, {
+	"rax": 156,
+	"name": "sys__sysctl",
+	"argc": 1
+}, {
+	"rax": 157,
+	"name": "sys_prctl",
+	"argc": 5
+}, {
+	"rax": 158,
+	"name": "sys_arch_prctl",
+	"argc": 3
+}, {
+	"rax": 159,
+	"name": "sys_adjtimex",
+	"argc": 1
+}, {
+	"rax": 160,
+	"name": "sys_setrlimit",
+	"argc": 2
+}, {
+	"rax": 161,
+	"name": "sys_chroot",
+	"argc": 1
+}, {
+	"rax": 162,
+	"name": "sys_sync",
+	"argc": 0
+}, {
+	"rax": 163,
+	"name": "sys_acct",
+	"argc": 1
+}, {
+	"rax": 164,
+	"name": "sys_settimeofday",
+	"argc": 2
+}, {
+	"rax": 165,
+	"name": "sys_mount",
+	"argc": 5
+}, {
+	"rax": 166,
+	"name": "sys_umount2",
+	"argc": 2
+}, {
+	"rax": 167,
+	"name": "sys_swapon",
+	"argc": 2
+}, {
+	"rax": 168,
+	"name": "sys_swapoff",
+	"argc": 1
+}, {
+	"rax": 169,
+	"name": "sys_reboot",
+	"argc": 4
+}, {
+	"rax": 170,
+	"name": "sys_sethostname",
+	"argc": 2
+}, {
+	"rax": 171,
+	"name": "sys_setdomainname",
+	"argc": 2
+}, {
+	"rax": 172,
+	"name": "sys_iopl",
+	"argc": 2
+}, {
+	"rax": 173,
+	"name": "sys_ioperm",
+	"argc": 3
+}, {
+	"rax": 174,
+	"name": "sys_create_module",
+	"argc": 1
+}, {
+	"rax": 175,
+	"name": "sys_init_module",
+	"argc": 3
+}, {
+	"rax": 176,
+	"name": "sys_delete_module",
+	"argc": 2
+}, {
+	"rax": 177,
+	"name": "sys_get_kernel_syms",
+	"argc": 1
+}, {
+	"rax": 178,
+	"name": "sys_query_module",
+	"argc": 1
+}, {
+	"rax": 179,
+	"name": "sys_quotactl",
+	"argc": 4
+}, {
+	"rax": 180,
+	"name": "sys_nfsservctl",
+	"argc": 1
+}, {
+	"rax": 181,
+	"name": "sys_getpmsg",
+	"argc": 1
+}, {
+	"rax": 182,
+	"name": "sys_putpmsg",
+	"argc": 1
+}, {
+	"rax": 183,
+	"name": "sys_afs_syscall",
+	"argc": 1
+}, {
+	"rax": 184,
+	"name": "sys_tuxcall",
+	"argc": 1
+}, {
+	"rax": 185,
+	"name": "sys_security",
+	"argc": 1
+}, {
+	"rax": 186,
+	"name": "sys_gettid",
+	"argc": 0
+}, {
+	"rax": 187,
+	"name": "sys_readahead",
+	"argc": 3
+}, {
+	"rax": 188,
+	"name": "sys_setxattr",
+	"argc": 5
+}, {
+	"rax": 189,
+	"name": "sys_lsetxattr",
+	"argc": 5
+}, {
+	"rax": 190,
+	"name": "sys_fsetxattr",
+	"argc": 5
+}, {
+	"rax": 191,
+	"name": "sys_getxattr",
+	"argc": 4
+}, {
+	"rax": 192,
+	"name": "sys_lgetxattr",
+	"argc": 4
+}, {
+	"rax": 193,
+	"name": "sys_fgetxattr",
+	"argc": 4
+}, {
+	"rax": 194,
+	"name": "sys_listxattr",
+	"argc": 3
+}, {
+	"rax": 195,
+	"name": "sys_llistxattr",
+	"argc": 3
+}, {
+	"rax": 196,
+	"name": "sys_flistxattr",
+	"argc": 3
+}, {
+	"rax": 197,
+	"name": "sys_removexattr",
+	"argc": 2
+}, {
+	"rax": 198,
+	"name": "sys_lremovexattr",
+	"argc": 2
+}, {
+	"rax": 199,
+	"name": "sys_fremovexattr",
+	"argc": 2
+}, {
+	"rax": 200,
+	"name": "sys_tkill",
+	"argc": 2
+}, {
+	"rax": 201,
+	"name": "sys_time",
+	"argc": 1
+}, {
+	"rax": 202,
+	"name": "sys_futex",
+	"argc": 6
+}, {
+	"rax": 203,
+	"name": "sys_sched_setaffinity",
+	"argc": 3
+}, {
+	"rax": 204,
+	"name": "sys_sched_getaffinity",
+	"argc": 3
+}, {
+	"rax": 205,
+	"name": "sys_set_thread_area",
+	"argc": 1
+}, {
+	"rax": 206,
+	"name": "sys_io_setup",
+	"argc": 2
+}, {
+	"rax": 207,
+	"name": "sys_io_destroy",
+	"argc": 1
+}, {
+	"rax": 208,
+	"name": "sys_io_getevents",
+	"argc": 4
+}, {
+	"rax": 209,
+	"name": "sys_io_submit",
+	"argc": 3
+}, {
+	"rax": 210,
+	"name": "sys_io_cancel",
+	"argc": 3
+}, {
+	"rax": 211,
+	"name": "sys_get_thread_area",
+	"argc": 1
+}, {
+	"rax": 212,
+	"name": "sys_lookup_dcookie",
+	"argc": 3
+}, {
+	"rax": 213,
+	"name": "sys_epoll_create",
+	"argc": 1
+}, {
+	"rax": 214,
+	"name": "sys_epoll_ctl_old",
+	"argc": 1
+}, {
+	"rax": 215,
+	"name": "sys_epoll_wait_old",
+	"argc": 1
+}, {
+	"rax": 216,
+	"name": "sys_remap_file_pages",
+	"argc": 5
+}, {
+	"rax": 217,
+	"name": "sys_getdents64",
+	"argc": 3
+}, {
+	"rax": 218,
+	"name": "sys_set_tid_address",
+	"argc": 1
+}, {
+	"rax": 219,
+	"name": "sys_restart_syscall",
+	"argc": 0
+}, {
+	"rax": 220,
+	"name": "sys_semtimedop",
+	"argc": 4
+}, {
+	"rax": 221,
+	"name": "sys_fadvise64",
+	"argc": 4
+}, {
+	"rax": 222,
+	"name": "sys_timer_create",
+	"argc": 3
+}, {
+	"rax": 223,
+	"name": "sys_timer_settime",
+	"argc": 4
+}, {
+	"rax": 224,
+	"name": "sys_timer_gettime",
+	"argc": 2
+}, {
+	"rax": 225,
+	"name": "sys_timer_getoverrun",
+	"argc": 1
+}, {
+	"rax": 226,
+	"name": "sys_timer_delete",
+	"argc": 1
+}, {
+	"rax": 227,
+	"name": "sys_clock_settime",
+	"argc": 2
+}, {
+	"rax": 228,
+	"name": "sys_clock_gettime",
+	"argc": 2
+}, {
+	"rax": 229,
+	"name": "sys_clock_getres",
+	"argc": 2
+}, {
+	"rax": 230,
+	"name": "sys_clock_nanosleep",
+	"argc": 4
+}, {
+	"rax": 231,
+	"name": "sys_exit_group",
+	"argc": 1
+},
+	{
+		"rax": 232,
+		"name": "sys_epoll_wait",
+		"argc": 4
+	}, {
+		"rax": 233,
+		"name": "sys_epoll_ctl",
+		"argc": 4
+	}, {
+		"rax": 234,
+		"name": "sys_tgkill",
+		"argc": 3
+	}, {
+		"rax": 235,
+		"name": "sys_utimes",
+		"argc": 2
+	}, {
+		"rax": 236,
+		"name": "sys_vserver",
+		"argc": 1
+	}, {
+		"rax": 237,
+		"name": "sys_mbind",
+		"argc": 6
+	}, {
+		"rax": 238,
+		"name": "sys_set_mempolicy",
+		"argc": 3
+	}, {
+		"rax": 239,
+		"name": "sys_get_mempolicy",
+		"argc": 5
+	}, {
+		"rax": 240,
+		"name": "sys_mq_open",
+		"argc": 4
+	}, {
+		"rax": 241,
+		"name": "sys_mq_unlink",
+		"argc": 1
+	}, {
+		"rax": 242,
+		"name": "sys_mq_timedsend",
+		"argc": 5
+	}, {
+		"rax": 243,
+		"name": "sys_mq_timedreceive",
+		"argc": 5
+	}, {
+		"rax": 244,
+		"name": "sys_mq_notify",
+		"argc": 2
+	}, {
+		"rax": 245,
+		"name": "sys_mq_getsetattr",
+		"argc": 3
+	}, {
+		"rax": 246,
+		"name": "sys_kexec_load",
+		"argc": 4
+	}, {
+		"rax": 247,
+		"name": "sys_waitid",
+		"argc": 5
+	}, {
+		"rax": 248,
+		"name": "sys_add_key",
+		"argc": 4
+	}, {
+		"rax": 249,
+		"name": "sys_request_key",
+		"argc": 4
+	}, {
+		"rax": 250,
+		"name": "sys_keyctl",
+		"argc": 5
+	}, {
+		"rax": 251,
+		"name": "sys_ioprio_set",
+		"argc": 3
+	}, {
+		"rax": 252,
+		"name": "sys_ioprio_get",
+		"argc": 2
+	}, {
+		"rax": 253,
+		"name": "sys_inotify_init",
+		"argc": 0
+	}, {
+		"rax": 254,
+		"name": "sys_inotify_add_watch",
+		"argc": 3
+	}, {
+		"rax": 255,
+		"name": "sys_inotify_rm_watch",
+		"argc": 2
+	}, {
+		"rax": 256,
+		"name": "sys_migrate_pages",
+		"argc": 4
+	}, {
+		"rax": 257,
+		"name": "sys_openat",
+		"argc": 4
+	}, {
+		"rax": 258,
+		"name": "sys_mkdirat",
+		"argc": 3
+	}, {
+		"rax": 259,
+		"name": "sys_mknodat",
+		"argc": 4
+	}, {
+		"rax": 260,
+		"name": "sys_fchownat",
+		"argc": 5
+	}, {
+		"rax": 261,
+		"name": "sys_futimesat",
+		"argc": 3
+	}, {
+		"rax": 262,
+		"name": "sys_newfstatat",
+		"argc": 4
+	}, {
+		"rax": 263,
+		"name": "sys_unlinkat",
+		"argc": 3
+	}, {
+		"rax": 264,
+		"name": "sys_renameat",
+		"argc": 4
+	}, {
+		"rax": 265,
+		"name": "sys_linkat",
+		"argc": 5
+	}, {
+		"rax": 266,
+		"name": "sys_symlinkat",
+		"argc": 3
+	}, {
+		"rax": 267,
+		"name": "sys_readlinkat",
+		"argc": 4
+	}, {
+		"rax": 268,
+		"name": "sys_fchmodat",
+		"argc": 3
+	}, {
+		"rax": 269,
+		"name": "sys_faccessat",
+		"argc": 3
+	}, {
+		"rax": 270,
+		"name": "sys_pselect6",
+		"argc": 6
+	}, {
+		"rax": 271,
+		"name": "sys_ppoll",
+		"argc": 5
+	}, {
+		"rax": 272,
+		"name": "sys_unshare",
+		"argc": 1
+	}, {
+		"rax": 273,
+		"name": "sys_set_robust_list",
+		"argc": 2
+	}, {
+		"rax": 274,
+		"name": "sys_get_robust_list",
+		"argc": 3
+	}, {
+		"rax": 275,
+		"name": "sys_splice",
+		"argc": 6
+	}, {
+		"rax": 276,
+		"name": "sys_tee",
+		"argc": 4
+	}, {
+		"rax": 277,
+		"name": "sys_sync_file_range",
+		"argc": 4
+	}, {
+		"rax": 278,
+		"name": "sys_vmsplice",
+		"argc": 4
+	}, {
+		"rax": 279,
+		"name": "sys_move_pages",
+		"argc": 6
+	}, {
+		"rax": 280,
+		"name": "sys_utimensat",
+		"argc": 4
+	}, {
+		"rax": 281,
+		"name": "sys_epoll_pwait",
+		"argc": 6
+	}, {
+		"rax": 282,
+		"name": "sys_signalfd",
+		"argc": 3
+	}, {
+		"rax": 283,
+		"name": "sys_timerfd_create",
+		"argc": 2
+	}, {
+		"rax": 284,
+		"name": "sys_eventfd",
+		"argc": 1
+	}, {
+		"rax": 285,
+		"name": "sys_fallocate",
+		"argc": 4
+	}, {
+		"rax": 286,
+		"name": "sys_timerfd_settime",
+		"argc": 4
+	}, {
+		"rax": 287,
+		"name": "sys_timerfd_gettime",
+		"argc": 2
+	}, {
+		"rax": 288,
+		"name": "sys_accept4",
+		"argc": 4
+	}, {
+		"rax": 289,
+		"name": "sys_signalfd4",
+		"argc": 4
+	}, {
+		"rax": 290,
+		"name": "sys_eventfd2",
+		"argc": 2
+	}, {
+		"rax": 291,
+		"name": "sys_epoll_create1",
+		"argc": 1
+	}, {
+		"rax": 292,
+		"name": "sys_dup3",
+		"argc": 3
+	}, {
+		"rax": 293,
+		"name": "sys_pipe2",
+		"argc": 2
+	}, {
+		"rax": 294,
+		"name": "sys_inotify_init1",
+		"argc": 1
+	}, {
+		"rax": 295,
+		"name": "sys_preadv",
+		"argc": 5
+	}, {
+		"rax": 296,
+		"name": "sys_pwritev",
+		"argc": 5
+	}, {
+		"rax": 297,
+		"name": "sys_rt_tgsigqueueinfo",
+		"argc": 4
+	}, {
+		"rax": 298,
+		"name": "sys_perf_event_open",
+		"argc": 5
+	}, {
+		"rax": 299,
+		"name": "sys_recvmmsg",
+		"argc": 5
+	}, {
+		"rax": 300,
+		"name": "sys_fanotify_init",
+		"argc": 2
+	}, {
+		"rax": 301,
+		"name": "sys_fanotify_mark",
+		"argc": 5
+	}, {
+		"rax": 302,
+		"name": "sys_prlimit64",
+		"argc": 4
+	}, {
+		"rax": 303,
+		"name": "sys_name_to_handle_at",
+		"argc": 5
+	}, {
+		"rax": 304,
+		"name": "sys_open_by_handle_at",
+		"argc": 5
+	}, {
+		"rax": 305,
+		"name": "sys_clock_adjtime",
+		"argc": 2
+	}, {
+		"rax": 306,
+		"name": "sys_syncfs",
+		"argc": 1
+	}, {
+		"rax": 307,
+		"name": "sys_sendmmsg",
+		"argc": 4
+	}, {
+		"rax": 308,
+		"name": "sys_setns",
+		"argc": 2
+	}, {
+		"rax": 309,
+		"name": "sys_getcpu",
+		"argc": 3
+	}, {
+		"rax": 310,
+		"name": "sys_process_vm_readv",
+		"argc": 6
+	}, {
+		"rax": 311,
+		"name": "sys_process_vm_writev",
+		"argc": 6
+	}, {
+		"rax": 312,
+		"name": "sys_kcmp",
+		"argc": 5
+	}, {
+		"rax": 313,
+		"name": "sys_finit_module",
+		"argc": 3
+	}, {
+		"rax": 314,
+		"name": "sys_sched_setattr",
+		"argc": 3
+	}, {
+		"rax": 315,
+		"name": "sys_sched_getattr",
+		"argc": 4
+	}, {
+		"rax": 316,
+		"name": "sys_renameat2",
+		"argc": 5
+	}, {
+		"rax": 317,
+		"name": "sys_seccomp",
+		"argc": 3
+	}, {
+		"rax": 318,
+		"name": "sys_getrandom",
+		"argc": 3
+	}, {
+		"rax": 319,
+		"name": "sys_memfd_create",
+		"argc": 2
+	}, {
+		"rax": 320,
+		"name": "sys_kexec_file_load",
+		"argc": 5
+	}, {
+		"rax": 321,
+		"name": "sys_bpf",
+		"argc": 3
+	}, {
+		"rax": 322,
+		"name": "stub_execveat",
+		"argc": 5
+	}, {
+		"rax": 323,
+		"name": "userfaultfd",
+		"argc": 1
+	}, {
+		"rax": 324,
+		"name": "membarrier",
+		"argc": 2
+	}, {
+		"rax": 325,
+		"name": "mlock2",
+		"argc": 3
+	}, {
+		"rax": 326,
+		"name": "copy_file_range",
+		"argc": 6
+	}, {
+		"rax": 327,
+		"name": "preadv2",
+		"argc": 6
+	}, {
+		"rax": 328,
+		"name": "pwritev2",
+		"argc": 6
+	}
+];
+
+let arg_list = ['rdi', 'rsi', 'rdx', 'r10', 'r8', 'r9']
+
+class Syscall {
+	constructor(reg, page, io) {
+		let rax = reg.get('rax');
+		for (let i of syscall_list) {
+			if (rax == i.rax) {
+				console.log(i.name)
+				if (this[i.name]) {
+					let argv = this.load_args(reg, i.argc);
+					this[i.name](reg, page, io, argv);
+				}
+			}
+		}
+	}
+
+	load_args(reg, argc) {
+		let args = [];
+		for (let i = 0; i < argc; i++) {
+			args.push(reg.get(arg_list[i]));
+		}
+		return args;
+
+	}
+
+	sys_write(reg, page, io, argv) {
+		let fd = io.find(argv[0].toString());
+		if (fd) {
+			let output = '';
+			for (let i of page.gets(argv[1], argv[2])) {
+				output += String.fromCharCode(i);
+			}
+			fd.handler['write'](output)
+			return 0;
+		}
+		throw 'sys_write error';
+	}
+
+	sys_read(reg, page, io, argv) {
+		let fd = io.find(argv[0].toString());
+		if (fd) {
+			let len = argv[2];
+			let data = fd.handler['read']().substring(0, parseInt(len.toString()));
+			page.map(argv[1], data);
+			return 0;
+		}
+		throw 'sys_read error';
+	}
+
+	sys_open(reg, page, io, argv){
+		let filename = argv[0];
+		let flags = argv[1];
+		let mode = argv[2];
+		// TODO
+	}
+
+	sys_exit(reg, page, io, argv){
+		reg.set('RET', 0)
+		reg.set('STOP', 1);
+	}
+}
