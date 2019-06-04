@@ -7,7 +7,7 @@ class Instruction{
   nop(log, reg, data){
     console.log(log);
   }
-  mov(log, reg, data){
+  mov_const(log, reg, data){
     data = little_endian_to_number(data);
     this.reg.set(reg, data);
     console.log(log.replace('%reg', reg).replace('%value', byte_to_hex(data)));
