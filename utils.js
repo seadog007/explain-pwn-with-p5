@@ -38,3 +38,13 @@ function reverseString(str) {
   else
     return reverseString(str.substr(1)) + str.charAt(0);
 }
+
+// convert bytes to chars
+function btoc(b) {
+  return b.map(b => String.fromCharCode(b)).join('');
+}
+
+// convert chars to bytes
+function ctob(c) {
+  return Array.from(c).map(c => c.charCodeAt(0));
+}
