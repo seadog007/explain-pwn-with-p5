@@ -44,6 +44,22 @@ class Parser {
     this.set = bytes;
   }
   do_it(reg, page, io) {
+    // let ins = new Instruction(reg, page, io); // wait Instruction to implement
+    for (let op of op_code) {
+      // convert to string to compare is easier then array compare, but also can use lodash of `_.isEqual()`
+      if (btoc(op.op) == btoc(this.set.slice(0, op.op.length))) {
+        this.set = this.set.slice(op.op.length);                  // slice out the op_code byte(s)
+        if (op.data_bytes > 0) {                                  // only process when `data_bytes` greater then zero
+          if (this.set.length < op.data_bytes) {                  // check the left bytes is safe to process
+            console.warn("op_code %s need %d bytes, but left %d", op.handler, op.data_bytes, this.set.length);
+          }
+          op.data = [].concat(this.set.slice(0, op.data_bytes));  // slice the data to store
+          this.set = this.set.slice(op.data.length);              // slice out the data from buffer
+        }
+        // ins[op.handler](op.log, op.reg, op.data);                 // push matched op to bin array // wait Instruction to implement
+        return op.op.length + (op.data || []).length;
+      }
+    }
     throw 'a';
     return 0;
   }
