@@ -15,7 +15,24 @@ let op_code = [
   {'op': [0x48, 0xb8],        'extend_set': list64,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'movabs r64, const64', 'handler': 'mov_single_main64',   'data_bytes': 8},
   {'op': [0x90],              'extend_set': null,     'extend_loc': null, 'log': 'nop',               'comment': 'nop',                 'handler': 'nop',                 'data_bytes': 0},
   {'op': [0x0f, 0x05],        'extend_set': null,     'extend_loc': null, 'log': 'syscall',           'comment': 'syscall',             'handler': 'syscall',             'data_bytes': 0},
-];
+].map(op => { // extend op code list from one to manys
+  let new_op_codes = [];
+    // only extend when `extend_set` not null
+    if (op.extend_set != null) {
+      for (let i in op.extend_set) {
+        // clone object, can replace by lodash
+        let new_op = Object.assign({}, op);               // clone
+        new_op.op = Object.assign([], op.op);             // array need clone again
+
+        new_op.op[new_op.extend_loc] -= 0 - i;            // prevent to use operator `+=` for misappend as string
+        new_op.reg = op.extend_set[i];
+        new_op_codes.push(new_op);                        // append extended op_list
+      }
+    } else {
+      new_op_codes = [ op ];
+    }
+    return new_op_codes;
+}).flat();    // flatten them
 
 // handler_exmaple(reg, page, io, log_format, match_reg, data);
 // [0x90] => nop(reg, page, io, 'nop', null, null);]
