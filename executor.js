@@ -8,7 +8,7 @@ class Executor {
     if (this.reg.STOP){
       return this.reg.RET;
     }
-    console.log('running', this.reg.get('rip').toString(), this.page.get(this.reg.get('rip')).toString(16));
+    console.log('running 0x' + this.reg.get('rip').toString(16));
     let ins_set = [];
     let rip = this.reg.get('rip').toString();
 

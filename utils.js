@@ -61,3 +61,7 @@ function little_endian_to_number(data){
   }
   return sum;
 }
+
+function little_endian_number_to_string(data){
+  return reverseString(hex_to_ascii(data));
+}

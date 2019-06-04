@@ -4,8 +4,8 @@ let list16 = ['ax', 'cx', 'dx', 'bx', 'sp', 'bp', 'si', 'di'];
 let list8 = ['al', 'cl', 'dl', 'bl', 'spl', 'bpl', 'sil', 'dil'];
 
 let op_code = [
-  {'op': [0x50],              'extend_set': list64,   'extend_loc': 0,    'log': 'push %reg',         'comment': 'push r64',            'handler': 'push_single_main64',  'data_bytes': 0},
-  {'op': [0x58],              'extend_set': list64,   'extend_loc': 0,    'log': 'pop %reg',          'comment': 'pop r64',             'handler': 'pop_single_main64',   'data_bytes': 0},
+  {'op': [0x50],              'extend_set': list64,   'extend_loc': 0,    'log': 'push %reg',         'comment': 'push r64',            'handler': 'push64',              'data_bytes': 0},
+  {'op': [0x58],              'extend_set': list64,   'extend_loc': 0,    'log': 'pop %reg',          'comment': 'pop r64',             'handler': 'pop64',               'data_bytes': 0},
   {'op': [0xb0],              'extend_set': list8,    'extend_loc': 0,    'log': 'mov %reg, %value',  'comment': 'mov r8, const8',      'handler': 'mov',                 'data_bytes': 1},
   {'op': [0x66, 0xb8],        'extend_set': list16,   'extend_loc': 1,    'log': 'mov %reg, %value',  'comment': 'mov r16, const16',    'handler': 'mov',                 'data_bytes': 2},
   {'op': [0x66, 0xc7, 0xc0],  'extend_set': list16,   'extend_loc': 2,    'log': 'mov %reg, %value',  'comment': 'mov r16, const16',    'handler': 'mov',                 'data_bytes': 2},
