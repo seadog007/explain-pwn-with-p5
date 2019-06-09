@@ -20,18 +20,61 @@ class Instruction{
   nop(){
   }
   mov(data){
-    if (data[0].includes(' ')){
+    if (data[0].includes('ptr')){
+      // ptr dst
+      if (parseInt(data[1]) == data[1]){
+        // const src
+        this.mov_const_to_ptr(data)
+      }else if (is_general_register(data[1])){
+        // reg src
+        this.mov_reg_to_ptr(data);
+      }else{
+        // ptr src
+        this.mov_ptr_to_ptr(data);
+      }
     }else{
       // simple dst
       if (parseInt(data[1]) == data[1]){
         // const src
-        this.mov_const(data)
+        this.mov_const_to_reg(data);
+      }else if (is_general_register(data[1])){
+        // reg src
+        this.mov_reg_to_reg(data);
+      }else{
+        // ptr src
+        this.mov_ptr_to_reg(data);
       }
     }
   }
-  mov_const(data){
+  mov_const_to_reg(data){
     data[1] = little_endian_to_number(data[1]);
     this.reg.set(data[0], data[1]);
+  }
+  mov_reg_to_reg(data){
+    let len = is_general_register(data[0]);
+    data[1] = this.reg.get(data[1], len);
+    this.reg.set(data[0], data[1]);
+  }
+  mov_ptr_to_reg(data){
+    let addr = parse_ptr(this.reg, data[1]);
+    let size = parse_mov_size(data[1]);
+    let len = is_general_register(data[0]);
+    if (size != len){
+      throw 'Size not match in mov instruction';
+    }
+    data[1] = little_endian_to_number(this.page.gets(addr, len));
+    reg.set(data[0], data[1]);
+  }
+  mov_const_to_ptr(data){
+    throw 'Not finish';
+  }
+  mov_reg_to_ptr(data){
+    let addr = parse_ptr(this.reg, data[0]);
+    let size = parse_mov_size(data[0]);
+    this.page.map(addr, little_endian_number_to_string(reg.get(data[1]).toString(16)));
+  }
+  mov_ptr_to_ptr(data){
+    throw 'Not finish';
   }
   syscall(){
     new Syscall(this.reg, this.page, this.io);

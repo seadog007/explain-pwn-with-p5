@@ -18,7 +18,7 @@ function setup() {
   let program = page.new_segment('0x4004b0', '0x100', 'r-xp', 'program');
   let stack = page.new_segment('0x7fffffff0000', '0x1000', 'rw-p', 'stack0');
 
-  page.map('0x4004b2', '\x90\x55\x90\x59\x90\x0f\x05\xb0\x01\xbf\x02\x00\x00\x00\x0f\x05');
+  page.map('0x4004b2', '\x55\x48\x89\xe5\x89\x7d\xfc\x8b\x45\xfc\x0f\xaf\xc0\x5d\xc3');
 
   reg.set('rbp', '0x7fffffff0200');
   reg.set('rsp', '0x7fffffff0200');
@@ -28,6 +28,7 @@ function setup() {
   page.map('0x7fffffff0250', 'ABCDEFG');
   reg.set('rdx', 0x20);
   reg.set('rsi', 0x7fffffff0250);
+  reg.set('rdi', 0xabcdef012345);
 }
 
 function draw() {
