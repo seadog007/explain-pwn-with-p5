@@ -11,7 +11,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(800, 600);
+  createCanvas(1000, 800);
   textFont(fontRegular);
   frameRate(1);
 
@@ -34,10 +34,13 @@ function setup() {
 function draw() {
   clear();
   background(255);
-  reg_box(500, 10, reg, 0, 16);
-  hex_dump(10, 70, page, reg.get('rsp'), '0x80', 'stack');
-  hex_dump(10, 210, page, '0x4004b0', '0x60', 'program');
+  hex_dump(10, 70, page, reg.get('rsp'), '0x80', 'Stack');
+  hex_dump(10, 215, page, '0x4004b0', '0x60', 'Program');
+  ins_box(10, 330, executor);
+
   vmmap_box(10, 10, page);
+
+  reg_box(500, 10, reg, 0, 16);
 
   executor.next();
 }

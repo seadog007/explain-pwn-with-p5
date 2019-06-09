@@ -112,7 +112,7 @@ function hex_dump(start_x, start_y, page, start, length, comment) {
         if (i != 0) {
           dumptext += '\n';
         }
-        dumptext += '0x' + pad((start + i).toString(16), 12) + ': ';
+        dumptext += ' 0x' + pad((start + i).toString(16), 12) + ': ';
       }
       dumptext += pad(page.get(start + i).toString(16), 2) + ' ';
     }
