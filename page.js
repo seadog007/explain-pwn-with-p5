@@ -95,14 +95,14 @@ class Page {
 
 function vmmap_box(start_x, start_y, page) {
   textAlign(LEFT, TOP);
-  let dumptext =  'start\t\tend\tlength\tattr\tname\n';
+  let dumptext =  pad('start', 14,' ') + '\t' + pad('end', 14, ' ') + '\t len\tattr\tname\n';
   for (i of page.vmmap()) {
-    dumptext += i.start + '\t' + i.end + '\t' + i.length + '\t' + i.attr + '\t' + i.name + '\n';
+    dumptext += '0x' + pad(i.start, 12, '0') + '\t0x' + pad(i.end, 12, '0') + '\t' + pad(i.length, 4, ' ') + '\t' + i.attr + '\t' + i.name + '\n';
   }
   text(dumptext, start_x, start_y, start_x + 500, start_y + 200);
 }
 
-function hex_dump(start_x, start_y, page, start, length) {
+function hex_dump(start_x, start_y, page, start, length, comment) {
   start = BigInt(start);
   length = BigInt(length);
   let dumptext = '';
@@ -112,11 +112,13 @@ function hex_dump(start_x, start_y, page, start, length) {
         if (i != 0) {
           dumptext += '\n';
         }
-        dumptext += '0x' + (start + i).toString(16) + ': ';
+        dumptext += '0x' + pad((start + i).toString(16), 12) + ': ';
       }
       dumptext += pad(page.get(start + i).toString(16), 2) + ' ';
     }
   }
   textAlign(LEFT, TOP);
+  comment += ':\n';
+  dumptext = comment + dumptext;
   text(dumptext, start_x, start_y, start_x + 500, start_y + 200);
 }

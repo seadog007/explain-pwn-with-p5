@@ -34,10 +34,10 @@ function setup() {
 function draw() {
   clear();
   background(255);
-  reg_box(600, 270, reg, 0, 16);
-  hex_dump(50, 200, page, reg.get('rsp'), '0x80');
-  hex_dump(100, 400, page, '0x4004b0', '0x60');
-  vmmap_box(550, 200, page);
+  reg_box(500, 10, reg, 0, 16);
+  hex_dump(10, 70, page, reg.get('rsp'), '0x80', 'stack');
+  hex_dump(10, 210, page, '0x4004b0', '0x60', 'program');
+  vmmap_box(10, 10, page);
 
   executor.next();
 }
